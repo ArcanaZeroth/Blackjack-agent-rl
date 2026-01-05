@@ -58,6 +58,3 @@ Każdy agent był trenowany przez **200 000 epizodów**, a następnie ewaluowany
 1.  **Dominacja DQN:** Sieć neuronowa (DQN) osiągnęła najlepszy wynik, przewyższając "sztywną" strategię bazową. Zastosowanie *Experience Replay* pozwoliło na efektywne wykorzystanie rzadkich zdarzeń w grze.
 2.  **Stabilność MC i A2C:** Metoda Monte Carlo oraz Actor-Critic osiągnęły wyniki bardzo zbliżone do teoretycznego optimum, deklasując strategię polegającą tylko na pasowaniu przy sumie 17.
 3.  **Wrażliwość Q-learningu:** Algorytm Q-learning osiągnął wynik poniżej oczekiwań (gorszy od strategii bazowej).
-
-## 📝 Autor
-[Twoje Imię / Twój Nick]
