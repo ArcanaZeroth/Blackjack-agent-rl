@@ -4,6 +4,7 @@ import numpy as np
 # DANE Z WYNIKÓW
 data = {
     'DQN':            {'wins': 43308, 'losses': 47861, 'draws': 8831},
+    'A2C':            {'wins': 42337, 'losses': 48141, 'draws': 9522},
     'Monte Carlo':    {'wins': 42617, 'losses': 48319, 'draws': 9064},
     'Basic Strategy': {'wins': 40800, 'losses': 48700, 'draws': 10500},
     'Q-learning':     {'wins': 38161, 'losses': 53337, 'draws': 8502}
