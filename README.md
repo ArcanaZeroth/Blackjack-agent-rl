@@ -1,60 +1,65 @@
 # Porównanie Metod Reinforcement Learning w grze Blackjack 🃏
 
-Projekt badawczy mający na celu porównanie skuteczności klasycznych metod tabelarycznych oraz metod głębokiego uczenia ze wzmocnieniem (Deep RL) w środowisku `Blackjack-v1` z biblioteki Gymnasium.
+Projekt badawczy analizujący skuteczność klasycznych algorytmów uczenia ze wzmocnieniem (RL) oraz metod głębokich (Deep RL) w środowisku `Blackjack-v1` z biblioteki Gymnasium.
 
 ## 📋 Opis Projektu
 
-Celem projektu było zaprojektowanie agentów uczących się optymalnej strategii gry w Blackjacka i porównanie ich wyników ze standardową strategią bazową (Basic Strategy). Przeanalizowano cztery podejścia:
-1.  **Monte Carlo Control** (First-visit)
-2.  **Q-learning** (Tabelaryczny)
-3.  **Deep Q-Network (DQN)** (Aproksymacja sieciami neuronowymi)
-4.  **Actor-Critic (A2C)** (Podejście gradientowe z krytykiem)
+Celem projektu było wytrenowanie agentów zdolnych do wypracowania optymalnej strategii gry bez znajomości zasad matematycznych Blackjacka. Badania skupiły się na porównaniu stabilności uczenia metod opartych na pełnych epizodach (Monte Carlo) względem metod różnic czasowych (TD Learning) oraz ich wariantów wykorzystujących sieci neuronowe.
 
-## 🛠️ Technologie
-
-* **Język:** Python 3.11
-* **Środowisko:** [Gymnasium](https://gymnasium.farama.org/) (`Blackjack-v1`)
-* **Deep Learning:** PyTorch
-* **Obliczenia:** NumPy
-
-## 📂 Struktura Plików
-
-* `DQN.ipynb` - Implementacja Deep Q-Network z buforem powtórek (Replay Buffer) i siecią docelową (Target Network).
-* `A2C.ipynb` - Implementacja algorytmu Actor-Critic z dwiema osobnymi sieciami neuronowymi.
-* `monte-carlo.ipynb` - Klasyczna metoda Monte Carlo (First-visit MC control).
-* `q-learning.ipynb` - Implementacja tabelarycznego Q-learningu.
-
-## 🚀 Jak uruchomić
-
-1.  Sklonuj repozytorium:
-    ```bash
-    git clone [https://github.com/twoj-nick/blackjack-rl.git](https://github.com/twoj-nick/blackjack-rl.git)
-    cd blackjack-rl
-    ```
-
-2.  Zainstaluj wymagane biblioteki:
-    ```bash
-    pip install gymnasium numpy torch jupyter
-    ```
-
-3.  Uruchom wybrany notatnik Jupyter (np. `DQN.ipynb`) lub przekonwertuj go do skryptu Python.
+Przeanalizowano cztery podejścia:
+1.  **Deep Q-Network (DQN):** Off-policy, aproksymacja sieciami neuronowymi z buforem powtórek.
+2.  **Monte Carlo Control:** First-visit MC, uczenie na rzeczywistych zwrotach bez bootstrappingu.
+3.  **Q-learning:** Klasyczna metoda tabelaryczna (off-policy) z optymalizacją parametrów.
+4.  **Actor-Critic (A2C):** Podejście hybrydowe optymalizujące jednocześnie politykę i funkcję wartości.
 
 ## 📊 Wyniki Eksperymentów
 
-Każdy agent był trenowany przez **200 000 epizodów**, a następnie ewaluowany na **100 000 gier testowych** (bez eksploracji).
+Modele trenowano przez **200 000 epizodów**. Ewaluacja została przeprowadzona na próbie **100 000 gier testowych** (bez eksploracji).
 
-| Metoda | Wygrane | Przegrane | Remisy | Skuteczność (%) |
+| Metoda | Wygrane | Przegrane | Remisy | Skuteczność |
 | :--- | :---: | :---: | :---: | :---: |
 | **DQN (Deep Q-Network)** | **43 308** | 47 861 | 8 831 | **43.3%** |
-| Monte Carlo | 42 617 | 48 319 | 9 064 | 42.6% |
-| Actor-Critic (A2C) | 42 337 | 48 141 | 9 522 | 42.3% |
-| *Basic Strategy (Baseline)* | *~40 800* | *~48 700* | *~10 500* | *40.8%* |
-| Q-learning | 38 161 | 53 337 | 8 502 | 38.2% |
+| **Monte Carlo Control** | 42 617 | 48 319 | 9 064 | **42.6%** |
+| **Q-learning (Optimized)** | 42 314 | 48 394 | 9 292 | **42.3%** |
+| **Actor-Critic (A2C)** | 42 337 | 48 141 | 9 522 | **42.3%** |
+| *Basic Strategy (Baseline)* | *40 800* | *48 700* | *10 500* | *40.8%* |
 
-> **Uwaga:** W Blackjacku kasyno zawsze ma matematyczną przewagę. Wynik powyżej 42-43% przy naturalnych zasadach jest uważany za zbliżony do optymalnego.
+## 🔍 Kluczowe Wnioski i Analiza
 
-## 🔍 Wnioski i Analiza
+### 1. Przełom w optymalizacji Q-learningu
+Wstępne eksperymenty wykazały dużą wrażliwość metody Q-learning na dobór parametrów, co skutkowało wynikami poniżej strategii bazowej (38.2%). Kluczowe okazało się wprowadzenie **jednoczesnego wygaszania współczynnika uczenia ($\alpha$) oraz parametru eksploracji ($\epsilon$)**. Pozwoliło to algorytmowi na poprawne uśrednienie wyników i osiągnięcie skuteczności **42.3%**, co zrównało go z zaawansowaną metodą A2C.
 
-1.  **Dominacja DQN:** Sieć neuronowa (DQN) osiągnęła najlepszy wynik, przewyższając "sztywną" strategię bazową. Zastosowanie *Experience Replay* pozwoliło na efektywne wykorzystanie rzadkich zdarzeń w grze.
-2.  **Stabilność MC i A2C:** Metoda Monte Carlo oraz Actor-Critic osiągnęły wyniki bardzo zbliżone do teoretycznego optimum, deklasując strategię polegającą tylko na pasowaniu przy sumie 17.
-3.  **Wrażliwość Q-learningu:** Algorytm Q-learning osiągnął wynik poniżej oczekiwań (gorszy od strategii bazowej).
+### 2. Dominacja i stabilność DQN
+DQN osiągnął najwyższą skuteczność dzięki zastosowaniu *Experience Replay* oraz sieci docelowej# Porównanie Metod Reinforcement Learning w grze Blackjack 🃏
+
+Projekt badawczy analizujący skuteczność klasycznych algorytmów uczenia ze wzmocnieniem (RL) oraz metod głębokich (Deep RL) w środowisku `Blackjack-v1` z biblioteki Gymnasium.
+
+## 📋 Opis Projektu
+
+Celem projektu było wytrenowanie agentów zdolnych do wypracowania optymalnej strategii gry bez znajomości zasad matematycznych Blackjacka. Badania skupiły się na porównaniu stabilności uczenia metod opartych na pełnych epizodach (Monte Carlo) względem metod różnic czasowych (TD Learning) oraz ich wariantów wykorzystujących sieci neuronowe.
+
+Przeanalizowano cztery podejścia:
+1.  **Deep Q-Network (DQN):** Off-policy, aproksymacja sieciami neuronowymi z buforem powtórek.
+2.  **Monte Carlo Control:** First-visit MC, uczenie na rzeczywistych zwrotach bez bootstrappingu.
+3.  **Q-learning:** Klasyczna metoda tabelaryczna (off-policy) z optymalizacją parametrów.
+4.  **Actor-Critic (A2C):** Podejście hybrydowe optymalizujące jednocześnie politykę i funkcję wartości.
+
+## 📊 Wyniki Eksperymentów
+
+Modele trenowano przez **200 000 epizodów**. Ewaluacja została przeprowadzona na próbie **100 000 gier testowych** (bez eksploracji).
+
+| Metoda | Wygrane | Przegrane | Remisy | Skuteczność |
+| :--- | :---: | :---: | :---: | :---: |
+| **DQN (Deep Q-Network)** | **43 308** | 47 861 | 8 831 | **43.3%** |
+| **Monte Carlo Control** | 42 617 | 48 319 | 9 064 | **42.6%** |
+| **Q-learning (Optimized)** | 42 314 | 48 394 | 9 292 | **42.3%** |
+| **Actor-Critic (A2C)** | 42 337 | 48 141 | 9 522 | **42.3%** |
+| *Basic Strategy (Baseline)* | *40 800* | *48 700* | *10 500* | *40.8%* |
+
+## 🔍 Kluczowe Wnioski i Analiza
+
+### 1. Przełom w optymalizacji Q-learningu
+Wstępne eksperymenty wykazały dużą wrażliwość metody Q-learning na dobór parametrów, co skutkowało wynikami poniżej strategii bazowej (38.2%). Kluczowe okazało się wprowadzenie **jednoczesnego wygaszania współczynnika uczenia ($\alpha$) oraz parametru eksploracji ($\epsilon$)**. Pozwoliło to algorytmowi na poprawne uśrednienie wyników i osiągnięcie skuteczności **42.3%**, co zrównało go z zaawansowaną metodą A2C.
+
+### 2. Dominacja i stabilność DQN
+DQN osiągnął najwyższą skuteczność dzięki zastosowaniu *Experience Replay* oraz sieci docelowej
